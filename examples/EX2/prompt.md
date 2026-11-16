@@ -7,7 +7,7 @@ Start with `%pip -q install langgraph langchain-openai`, followed by imports, co
 
 Read the key only with `from google.colab import userdata` and `os.environ["OPENAI_API_KEY"] = userdata.get("OPENAI_API_KEY")`. Never print the key, use getpass, or put credentials in source or output.
 
-Set MODEL_NAME = "gpt-4.1-nano" in one place. This is a low-cost model suitable for three-way classification with structured output. Official reference: https://developers.openai.com/api/docs/models/gpt-4.1-nano . Configure ChatOpenAI with temperature=0 and max_retries=0. Use with_structured_output with a Pydantic model containing only category: Literal["billing", "technical", "general"]. Prefer method="json_schema" and strict=True. Fail visibly on API/schema errors; do not retry or silently choose another category.
+Set MODEL_NAME = "gpt-6-luna" in one place. This is a low-cost model suitable for three-way classification with structured output. Official reference: https://developers.openai.com/api/docs/models/gpt-6-luna . Configure ChatOpenAI with temperature=0, reasoning_effort="none", and max_retries=0. The none reasoning effort preserves compatibility with custom temperature settings. See https://developers.openai.com/api/docs/guides/latest-model#update-api-and-model-parameters . Use with_structured_output with a Pydantic model containing only category: Literal["billing", "technical", "general"]. Prefer method="json_schema" and strict=True. Fail visibly on API/schema errors; do not retry or silently choose another category.
 
 ## State and graph
 State has exactly ticket (original input string), category (one of the three literals), team (string), and reply (string). Only ticket is provided initially; the graph fills the other fields.
@@ -39,4 +39,4 @@ Assert all four result keys, input preservation, valid category, matching team a
 Add a short README explaining fresh-runtime Colab execution, secret setup, graph drawing network access, and credential-free mock checks. Leave a 3–5 sentence reflection section for observations after a real run; do not invent results. Save notebook cells with no execution counts or generated outputs. Public GitHub and accessible Colab links must be supplied by the owner after publishing; do not invent links. Record validation limitations.
 
 ## Revisions
-Initial implementation follows this specification. No revision rounds yet.
+Revision 1: Replaced the retired gpt-4.1-nano after a Colab run returned model_not_found. The final specification above selects gpt-6-luna (the homework example) with reasoning_effort="none", retaining temperature=0 and the same graph and structured-output contract. The original model was shut down on October 23, 2026: https://developers.openai.com/api/docs/deprecations .
